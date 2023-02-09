@@ -1,22 +1,9 @@
-import { ApolloClient, ApolloProvider, InMemoryCache, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import { NextLaunchDocument } from "./queries";
+import { NextLaunchDocument } from "../src/queries";
 
-const client = new ApolloClient({
-  uri: "https://spacex-production.up.railway.app",
-  cache: new InMemoryCache(),
-});
-
-export default function App() {
-  return (
-    <ApolloProvider client={client}>
-      <HomeScreen />
-    </ApolloProvider>
-  );
-}
-
-function HomeScreen() {
+export default function Home() {
   const result = useQuery(NextLaunchDocument);
 
   return (
