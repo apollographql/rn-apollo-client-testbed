@@ -1,25 +1,31 @@
 {
   "name": "rn-apollo-client-testbed",
   "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
+  "main": "src/main.js",
   "scripts": {
     "build:android:development": "npx eas-cli build --profile=development --platform=android",
     "build:ios:development": "npx eas-cli build --profile=development --platform=ios",
     "build:ios:simulator": "npx eas-cli build --profile=simulator --platform=ios",
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "start": "expo start --dev-client --tunnel"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.7",
+    "@graphql-codegen/near-operation-file-preset": "^2.5.0",
+    "@types/react": "~18.0.24",
+    "@types/react-native": "~0.70.6",
     "expo": "~47.0.12",
     "expo-status-bar": "~1.4.2",
     "react": "18.1.0",
     "react-native": "0.70.5",
-    "expo-dev-client": "~2.0.1"
+    "typescript": "^4.9.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "@expo/ngrok": "^4.1.0",
+    "@graphql-codegen/cli": "^3.0.0",
+    "@graphql-codegen/client-preset": "^2.0.0",
+    "expo-dev-client": "~2.0.1",
+    "graphql": "^15.8.0"
   },
   "private": true
 }
