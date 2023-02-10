@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { Stack, useLocalSearchParams, useSegments } from "expo-router";
-import { Box, Link, Text } from "../../src/components";
+import { Box, Link, NextLaunchButton, Text } from "../../src/components";
 import { LaunchDetailDocument } from "../../src/queries";
 
 export default function LaunchDetails() {
@@ -28,6 +28,7 @@ export default function LaunchDetails() {
           </>
         )}
         <Box flexGrow={1} justifyContent="flex-end">
+          {launch?.id && <NextLaunchButton currentLaunchId={launch.id} />}
           <Link href={`./`}>See all missions</Link>
         </Box>
       </Box>

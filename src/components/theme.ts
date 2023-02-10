@@ -41,19 +41,19 @@ const theme = createTheme({
   buttonVariants: {
     defaults: {
       backgroundColor: "primary",
-      textColor: "primaryContrast",
+      color: "primaryContrast",
     },
     secondary: {
       backgroundColor: "primaryContrast",
-      textColor: "primary",
+      color: "primary",
     },
     muted: {
       backgroundColor: "muted",
-      textColor: "mutedContrast",
+      color: "mutedContrast",
     },
     dark: {
       backgroundColor: "dark",
-      textColor: "darkContrast",
+      color: "darkContrast",
     },
   },
   boxVariants: {

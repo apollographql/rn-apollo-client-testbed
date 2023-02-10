@@ -4,10 +4,7 @@ import { useMemo } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import { Box, Link, Pressable, Text } from "../../src/components";
 import { LaunchListDocument } from "../../src/queries";
-
-function isDefined<T>(x: T | null | undefined): x is T {
-  return x != null;
-}
+import { isDefined } from "../../src/utils";
 
 export default function Missions() {
   const result = useQuery(LaunchListDocument);
@@ -19,7 +16,6 @@ export default function Missions() {
       })),
     [result.data?.launches]
   );
-  console.log(launches);
   return (
     <>
       <Stack.Screen options={{ title: "Launch Overview" }} />
