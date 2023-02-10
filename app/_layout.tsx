@@ -5,7 +5,7 @@ import { Box, Text } from "../src/components";
 import theme from "../src/components/theme";
 
 const client = new ApolloClient({
-  uri: "https://spacex-production.up.railway.app",
+  uri: "https://main--spacex-l4uc6p.apollographos.net/graphql",
   cache: new InMemoryCache(),
 });
 

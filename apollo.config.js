@@ -2,7 +2,7 @@ module.exports = {
   client: {
     service: {
       name: "SpaceX",
-      url: "https://spacex-production.up.railway.app",
+      url: "https://main--spacex-l4uc6p.apollographos.net/graphql",
     },
   },
 };
