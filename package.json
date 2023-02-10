@@ -6,11 +6,14 @@
     "build:android:development": "npx eas-cli build --profile=development --platform=android",
     "build:ios:development": "npx eas-cli build --profile=development --platform=ios",
     "build:ios:simulator": "npx eas-cli build --profile=simulator --platform=ios",
-    "start": "expo start --dev-client --tunnel"
+    "start": "expo start --dev-client --tunnel",
+    "codegen": "graphql-codegen"
+
   },
   "dependencies": {
     "@apollo/client": "^3.7.7",
     "@graphql-codegen/near-operation-file-preset": "^2.5.0",
+    "@shopify/restyle": "^2.3.0",
     "@types/react": "~18.0.24",
     "@types/react-native": "~0.70.6",
     "expo": "~47.0.3",
@@ -31,12 +34,12 @@
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
+    "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@expo/ngrok": "^4.1.0",
     "@graphql-codegen/cli": "^3.0.0",
     "@graphql-codegen/client-preset": "^2.0.0",
     "expo-dev-client": "~2.0.1",
-    "graphql": "^15.8.0",
-    "@babel/plugin-proposal-export-namespace-from": "^7.18.9"
+    "graphql": "^15.8.0"
   },
   "resolutions": {
     "metro": "^0.73.7",

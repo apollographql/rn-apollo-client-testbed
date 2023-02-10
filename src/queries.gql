@@ -1,5 +1,38 @@
 query NextLaunch {
   launchNext {
+    id
     mission_name
+    launch_date_unix
+    launch_site {
+      site_name
+    }
+  }
+}
+
+query LaunchDetail($id: ID!) {
+  launch(id: $id) {
+    id
+    mission_name
+    details
+    rocket {
+      rocket_name
+      rocket_type
+    }
+    launch_date_unix
+    launch_success
+    upcoming
+    links {
+      wikipedia
+    }
+  }
+}
+
+query LaunchList {
+  launches {
+    id
+    mission_name
+    launch_date_unix
+    launch_success
+    upcoming
   }
 }
