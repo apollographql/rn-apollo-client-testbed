@@ -1,14 +1,16 @@
 {
   "name": "rn-apollo-client-testbed",
   "version": "1.0.0",
-  "main": "src/main.js",
+  "main": "index.js",
   "scripts": {
     "build:android:development": "npx eas-cli build --profile=development --platform=android",
     "build:ios:development": "npx eas-cli build --profile=development --platform=ios",
     "build:ios:simulator": "npx eas-cli build --profile=simulator --platform=ios",
     "start": "expo start --dev-client --tunnel",
-    "codegen": "graphql-codegen"
-
+    "codegen": "graphql-codegen",
+    "download-profile": "test -d android || expo prebuild; react-native profile-hermes .",
+    "android": "echo 'use the CI-built development build and run \"npm run start\"'",
+    "ios": "echo 'use the CI-built development build and run \"npm run start\"'"
   },
   "dependencies": {
     "@apollo/client": "^3.7.7",
@@ -16,7 +18,7 @@
     "@shopify/restyle": "^2.3.0",
     "@types/react": "~18.0.24",
     "@types/react-native": "~0.70.6",
-    "expo": "~47.0.3",
+    "expo": "~47.0.12",
     "expo-constants": "~14.0.2",
     "expo-linking": "~3.3.0",
     "expo-router": "^1.0.0-rc1",
