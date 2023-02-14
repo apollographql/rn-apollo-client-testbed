@@ -37,6 +37,7 @@
         "projectId": "0c93a498-fc0d-4e45-9e08-36399405030b"
       }
     },
-    "owner": "prometheus-web"
+    "owner": "prometheus-web",
+    "jsEngine": "hermes"
   }
 }

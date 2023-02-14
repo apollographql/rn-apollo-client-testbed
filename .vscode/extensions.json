@@ -1,5 +1,6 @@
 {
     "recommendations": [
-        "apollographql.vscode-apollo"
+        "apollographql.vscode-apollo",
+        "msjsdiag.vscode-react-native"
     ]
 }
