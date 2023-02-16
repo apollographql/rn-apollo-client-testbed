@@ -1,0 +1,262 @@
+diff --git a/node_modules/@react-native-community/cli-hermes/build/profileHermes/downloadProfile.d.ts.map b/node_modules/@react-native-community/cli-hermes/build/profileHermes/downloadProfile.d.ts.map
+index 2581048..9e55b99 100644
+--- a/node_modules/@react-native-community/cli-hermes/build/profileHermes/downloadProfile.d.ts.map
++++ b/node_modules/@react-native-community/cli-hermes/build/profileHermes/downloadProfile.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"downloadProfile.d.ts","sourceRoot":"","sources":["../../src/profileHermes/downloadProfile.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,MAAM,EAAC,MAAM,mCAAmC,CAAC;AA4BzD;;;;;;;;;;GAUG;AACH,wBAAsB,eAAe,CACnC,GAAG,EAAE,MAAM,EACX,OAAO,EAAE,MAAM,EACf,QAAQ,CAAC,EAAE,MAAM,EACjB,aAAa,CAAC,EAAE,MAAM,EACtB,GAAG,CAAC,EAAE,OAAO,EACb,uBAAuB,CAAC,EAAE,OAAO,EACjC,IAAI,CAAC,EAAE,MAAM,EACb,KAAK,CAAC,EAAE,MAAM,EACd,WAAW,CAAC,EAAE,MAAM,iBAqFrB"}
+\ No newline at end of file
++{"version":3,"file":"downloadProfile.d.ts","sourceRoot":"","sources":["../../src/profileHermes/downloadProfile.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,MAAM,EAAC,MAAM,mCAAmC,CAAC;AA6BzD;;;;;;;;;;GAUG;AACH,wBAAsB,eAAe,CACnC,GAAG,EAAE,MAAM,EACX,OAAO,EAAE,MAAM,EACf,QAAQ,CAAC,EAAE,MAAM,EACjB,aAAa,CAAC,EAAE,MAAM,EACtB,GAAG,CAAC,EAAE,OAAO,EACb,uBAAuB,CAAC,EAAE,OAAO,EACjC,IAAI,GAAE,MAAe,EACrB,KAAK,CAAC,EAAE,MAAM,EACd,WAAW,CAAC,EAAE,MAAM,iBAwFrB"}
+\ No newline at end of file
+diff --git a/node_modules/@react-native-community/cli-hermes/build/profileHermes/downloadProfile.js b/node_modules/@react-native-community/cli-hermes/build/profileHermes/downloadProfile.js
+index e9b330b..3730cc4 100644
+--- a/node_modules/@react-native-community/cli-hermes/build/profileHermes/downloadProfile.js
++++ b/node_modules/@react-native-community/cli-hermes/build/profileHermes/downloadProfile.js
+@@ -54,6 +54,7 @@ function _cliPlatformAndroid() {
+   };
+   return data;
+ }
++var _metroBundleOptions = require("./metroBundleOptions");
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ /**
+  * Get the last modified hermes profile
+@@ -84,7 +85,7 @@ function execSyncWithLog(command) {
+  * @param appId
+  * @param appIdSuffix
+  */
+-async function downloadProfile(ctx, dstPath, filename, sourcemapPath, raw, shouldGenerateSourcemap, port, appId, appIdSuffix) {
++async function downloadProfile(ctx, dstPath, filename, sourcemapPath, raw, shouldGenerateSourcemap, port = '8081', appId, appIdSuffix) {
+   try {
+     const androidProject = (0, _cliPlatformAndroid().getAndroidProject)(ctx);
+     const packageNameWithSuffix = [appId || androidProject.packageName, appIdSuffix].filter(Boolean).join('.');
+@@ -111,13 +112,15 @@ async function downloadProfile(ctx, dstPath, filename, sourcemapPath, raw, shoul
+       const osTmpDir = _os().default.tmpdir();
+       const tempFilePath = _path().default.join(osTmpDir, file);
+       execSyncWithLog(`adb shell run-as ${packageNameWithSuffix} cat cache/${file} > ${tempFilePath}`);
++      const bundleOptions = (0, _metroBundleOptions.getMetroBundleOptions)(tempFilePath);
++
+       // If path to source map is not given
+       if (!sourcemapPath) {
+         // Get or generate the source map
+         if (shouldGenerateSourcemap) {
+-          sourcemapPath = await (0, _sourcemapUtils.generateSourcemap)(port);
++          sourcemapPath = await (0, _sourcemapUtils.generateSourcemap)(port, bundleOptions);
+         } else {
+-          sourcemapPath = await (0, _sourcemapUtils.findSourcemap)(ctx, port);
++          sourcemapPath = await (0, _sourcemapUtils.findSourcemap)(ctx, port, bundleOptions);
+         }
+ 
+         // Run without source map
+diff --git a/node_modules/@react-native-community/cli-hermes/build/profileHermes/downloadProfile.js.map b/node_modules/@react-native-community/cli-hermes/build/profileHermes/downloadProfile.js.map
+index ea7ce3c..3d39577 100644
+--- a/node_modules/@react-native-community/cli-hermes/build/profileHermes/downloadProfile.js.map
++++ b/node_modules/@react-native-community/cli-hermes/build/profileHermes/downloadProfile.js.map
+@@ -1 +1 @@
+-{"version":3,"names":["getLatestFile","packageNameWithSuffix","file","execSync","toString","trim","e","Error","execSyncWithLog","command","logger","debug","downloadProfile","ctx","dstPath","filename","sourcemapPath","raw","shouldGenerateSourcemap","port","appId","appIdSuffix","androidProject","getAndroidProject","packageName","filter","Boolean","join","CLIError","info","root","success","osTmpDir","os","tmpdir","tempFilePath","path","generateSourcemap","findSourcemap","warn","events","transformer","transformedFilePath","basename","fs","writeFileSync","JSON","stringify","undefined"],"sources":["../../src/profileHermes/downloadProfile.ts"],"sourcesContent":["import {Config} from '@react-native-community/cli-types';\nimport {execSync} from 'child_process';\nimport {logger, CLIError} from '@react-native-community/cli-tools';\nimport fs from 'fs';\nimport path from 'path';\nimport os from 'os';\nimport transformer from 'hermes-profile-transformer';\nimport {findSourcemap, generateSourcemap} from './sourcemapUtils';\nimport {getAndroidProject} from '@react-native-community/cli-platform-android';\n/**\n * Get the last modified hermes profile\n * @param packageNameWithSuffix\n */\nfunction getLatestFile(packageNameWithSuffix: string): string {\n  try {\n    const file = execSync(`adb shell run-as ${packageNameWithSuffix} ls cache/ -tp | grep -v /$ | grep -E '.cpuprofile' | head -1\n        `);\n    return file.toString().trim();\n  } catch (e) {\n    throw new Error(e);\n  }\n}\n\nfunction execSyncWithLog(command: string) {\n  logger.debug(`${command}`);\n  return execSync(command);\n}\n\n/**\n * Pull and convert a Hermes tracing profile to Chrome tracing profile\n * @param ctx\n * @param dstPath\n * @param fileName\n * @param sourceMapPath\n * @param raw\n * @param generateSourceMap\n * @param appId\n * @param appIdSuffix\n */\nexport async function downloadProfile(\n  ctx: Config,\n  dstPath: string,\n  filename?: string,\n  sourcemapPath?: string,\n  raw?: boolean,\n  shouldGenerateSourcemap?: boolean,\n  port?: string,\n  appId?: string,\n  appIdSuffix?: string,\n) {\n  try {\n    const androidProject = getAndroidProject(ctx);\n    const packageNameWithSuffix = [\n      appId || androidProject.packageName,\n      appIdSuffix,\n    ]\n      .filter(Boolean)\n      .join('.');\n\n    // If file name is not specified, pull the latest file from device\n    const file = filename || getLatestFile(packageNameWithSuffix);\n    if (!file) {\n      throw new CLIError(\n        'There is no file in the cache/ directory. Did you record a profile from the developer menu?',\n      );\n    }\n\n    logger.info(`File to be pulled: ${file}`);\n\n    // If destination path is not specified, pull to the current directory\n    dstPath = dstPath || ctx.root;\n\n    logger.debug('Internal commands run to pull the file:');\n\n    // If --raw, pull the hermes profile to dstPath\n    if (raw) {\n      execSyncWithLog(\n        `adb shell run-as ${packageNameWithSuffix} cat cache/${file} > ${dstPath}/${file}`,\n      );\n      logger.success(`Successfully pulled the file to ${dstPath}/${file}`);\n    }\n\n    // Else: transform the profile to Chrome format and pull it to dstPath\n    else {\n      const osTmpDir = os.tmpdir();\n      const tempFilePath = path.join(osTmpDir, file);\n\n      execSyncWithLog(\n        `adb shell run-as ${packageNameWithSuffix} cat cache/${file} > ${tempFilePath}`,\n      );\n      // If path to source map is not given\n      if (!sourcemapPath) {\n        // Get or generate the source map\n        if (shouldGenerateSourcemap) {\n          sourcemapPath = await generateSourcemap(port);\n        } else {\n          sourcemapPath = await findSourcemap(ctx, port);\n        }\n\n        // Run without source map\n        if (!sourcemapPath) {\n          logger.warn(\n            'Cannot find source maps, running the transformer without it',\n          );\n          logger.info(\n            'Instructions on how to get source maps: set `bundleInDebug: true` in your app/build.gradle file, inside the `project.ext.react` map.',\n          );\n        }\n      }\n\n      // Run transformer tool to convert from Hermes to Chrome format\n      const events = await transformer(\n        tempFilePath,\n        sourcemapPath,\n        'index.bundle',\n      );\n\n      const transformedFilePath = `${dstPath}/${path.basename(\n        file,\n        '.cpuprofile',\n      )}-converted.json`;\n      fs.writeFileSync(\n        transformedFilePath,\n        JSON.stringify(events, undefined, 4),\n        'utf-8',\n      );\n      logger.success(\n        `Successfully converted to Chrome tracing format and pulled the file to ${transformedFilePath}`,\n      );\n    }\n  } catch (e) {\n    throw e;\n  }\n}\n"],"mappings":"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"}
+\ No newline at end of file
++{"version":3,"names":["getLatestFile","packageNameWithSuffix","file","execSync","toString","trim","e","Error","execSyncWithLog","command","logger","debug","downloadProfile","ctx","dstPath","filename","sourcemapPath","raw","shouldGenerateSourcemap","port","appId","appIdSuffix","androidProject","getAndroidProject","packageName","filter","Boolean","join","CLIError","info","root","success","osTmpDir","os","tmpdir","tempFilePath","path","bundleOptions","getMetroBundleOptions","generateSourcemap","findSourcemap","warn","events","transformer","transformedFilePath","basename","fs","writeFileSync","JSON","stringify","undefined"],"sources":["../../src/profileHermes/downloadProfile.ts"],"sourcesContent":["import {Config} from '@react-native-community/cli-types';\nimport {execSync} from 'child_process';\nimport {logger, CLIError} from '@react-native-community/cli-tools';\nimport fs from 'fs';\nimport path from 'path';\nimport os from 'os';\nimport transformer from 'hermes-profile-transformer';\nimport {findSourcemap, generateSourcemap} from './sourcemapUtils';\nimport {getAndroidProject} from '@react-native-community/cli-platform-android';\nimport {getMetroBundleOptions} from './metroBundleOptions';\n/**\n * Get the last modified hermes profile\n * @param packageNameWithSuffix\n */\nfunction getLatestFile(packageNameWithSuffix: string): string {\n  try {\n    const file = execSync(`adb shell run-as ${packageNameWithSuffix} ls cache/ -tp | grep -v /$ | grep -E '.cpuprofile' | head -1\n        `);\n    return file.toString().trim();\n  } catch (e) {\n    throw new Error(e);\n  }\n}\n\nfunction execSyncWithLog(command: string) {\n  logger.debug(`${command}`);\n  return execSync(command);\n}\n\n/**\n * Pull and convert a Hermes tracing profile to Chrome tracing profile\n * @param ctx\n * @param dstPath\n * @param fileName\n * @param sourceMapPath\n * @param raw\n * @param generateSourceMap\n * @param appId\n * @param appIdSuffix\n */\nexport async function downloadProfile(\n  ctx: Config,\n  dstPath: string,\n  filename?: string,\n  sourcemapPath?: string,\n  raw?: boolean,\n  shouldGenerateSourcemap?: boolean,\n  port: string = '8081',\n  appId?: string,\n  appIdSuffix?: string,\n) {\n  try {\n    const androidProject = getAndroidProject(ctx);\n    const packageNameWithSuffix = [\n      appId || androidProject.packageName,\n      appIdSuffix,\n    ]\n      .filter(Boolean)\n      .join('.');\n\n    // If file name is not specified, pull the latest file from device\n    const file = filename || getLatestFile(packageNameWithSuffix);\n    if (!file) {\n      throw new CLIError(\n        'There is no file in the cache/ directory. Did you record a profile from the developer menu?',\n      );\n    }\n\n    logger.info(`File to be pulled: ${file}`);\n\n    // If destination path is not specified, pull to the current directory\n    dstPath = dstPath || ctx.root;\n\n    logger.debug('Internal commands run to pull the file:');\n\n    // If --raw, pull the hermes profile to dstPath\n    if (raw) {\n      execSyncWithLog(\n        `adb shell run-as ${packageNameWithSuffix} cat cache/${file} > ${dstPath}/${file}`,\n      );\n      logger.success(`Successfully pulled the file to ${dstPath}/${file}`);\n    }\n\n    // Else: transform the profile to Chrome format and pull it to dstPath\n    else {\n      const osTmpDir = os.tmpdir();\n      const tempFilePath = path.join(osTmpDir, file);\n\n      execSyncWithLog(\n        `adb shell run-as ${packageNameWithSuffix} cat cache/${file} > ${tempFilePath}`,\n      );\n\n      const bundleOptions = getMetroBundleOptions(tempFilePath);\n\n      // If path to source map is not given\n      if (!sourcemapPath) {\n        // Get or generate the source map\n        if (shouldGenerateSourcemap) {\n          sourcemapPath = await generateSourcemap(port, bundleOptions);\n        } else {\n          sourcemapPath = await findSourcemap(ctx, port, bundleOptions);\n        }\n\n        // Run without source map\n        if (!sourcemapPath) {\n          logger.warn(\n            'Cannot find source maps, running the transformer without it',\n          );\n          logger.info(\n            'Instructions on how to get source maps: set `bundleInDebug: true` in your app/build.gradle file, inside the `project.ext.react` map.',\n          );\n        }\n      }\n\n      // Run transformer tool to convert from Hermes to Chrome format\n      const events = await transformer(\n        tempFilePath,\n        sourcemapPath,\n        'index.bundle',\n      );\n\n      const transformedFilePath = `${dstPath}/${path.basename(\n        file,\n        '.cpuprofile',\n      )}-converted.json`;\n      fs.writeFileSync(\n        transformedFilePath,\n        JSON.stringify(events, undefined, 4),\n        'utf-8',\n      );\n      logger.success(\n        `Successfully converted to Chrome tracing format and pulled the file to ${transformedFilePath}`,\n      );\n    }\n  } catch (e) {\n    throw e;\n  }\n}\n"],"mappings":"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"}
+\ No newline at end of file
+diff --git a/node_modules/@react-native-community/cli-hermes/build/profileHermes/metroBundleOptions.d.ts b/node_modules/@react-native-community/cli-hermes/build/profileHermes/metroBundleOptions.d.ts
+new file mode 100644
+index 0000000..b15bc18
+--- /dev/null
++++ b/node_modules/@react-native-community/cli-hermes/build/profileHermes/metroBundleOptions.d.ts
+@@ -0,0 +1,7 @@
++export interface MetroBundleOptions {
++    platform: string;
++    dev: boolean;
++    minify: boolean;
++}
++export declare function getMetroBundleOptions(downloadedProfileFilePath: string): MetroBundleOptions;
++//# sourceMappingURL=metroBundleOptions.d.ts.map
+\ No newline at end of file
+diff --git a/node_modules/@react-native-community/cli-hermes/build/profileHermes/metroBundleOptions.d.ts.map b/node_modules/@react-native-community/cli-hermes/build/profileHermes/metroBundleOptions.d.ts.map
+new file mode 100644
+index 0000000..139a2a5
+--- /dev/null
++++ b/node_modules/@react-native-community/cli-hermes/build/profileHermes/metroBundleOptions.d.ts.map
+@@ -0,0 +1 @@
++{"version":3,"file":"metroBundleOptions.d.ts","sourceRoot":"","sources":["../../src/profileHermes/metroBundleOptions.ts"],"names":[],"mappings":"AAIA,MAAM,WAAW,kBAAkB;IACjC,QAAQ,EAAE,MAAM,CAAC;IACjB,GAAG,EAAE,OAAO,CAAC;IACb,MAAM,EAAE,OAAO,CAAC;CACjB;AAED,wBAAgB,qBAAqB,CACnC,yBAAyB,EAAE,MAAM,GAChC,kBAAkB,CAgDpB"}
+\ No newline at end of file
+diff --git a/node_modules/@react-native-community/cli-hermes/build/profileHermes/metroBundleOptions.js b/node_modules/@react-native-community/cli-hermes/build/profileHermes/metroBundleOptions.js
+new file mode 100644
+index 0000000..6dd5a8d
+--- /dev/null
++++ b/node_modules/@react-native-community/cli-hermes/build/profileHermes/metroBundleOptions.js
+@@ -0,0 +1,67 @@
++"use strict";
++
++Object.defineProperty(exports, "__esModule", {
++  value: true
++});
++exports.getMetroBundleOptions = getMetroBundleOptions;
++function _cliTools() {
++  const data = require("@react-native-community/cli-tools");
++  _cliTools = function () {
++    return data;
++  };
++  return data;
++}
++function _fs() {
++  const data = _interopRequireDefault(require("fs"));
++  _fs = function () {
++    return data;
++  };
++  return data;
++}
++function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++function getMetroBundleOptions(downloadedProfileFilePath) {
++  let options = {
++    platform: 'android',
++    dev: true,
++    minify: false
++  };
++  try {
++    const contents = JSON.parse(_fs().default.readFileSync(downloadedProfileFilePath, {
++      encoding: 'utf8'
++    }));
++    const matchBundleUrl = /^.*\((.*index\.bundle.*)\)/;
++    let containsExpoDevMenu = false;
++    let hadMatch = false;
++    for (const frame of Object.values(contents.stackFrames)) {
++      if (frame.name.includes('EXDevMenuApp')) {
++        containsExpoDevMenu = true;
++      }
++      const match = matchBundleUrl.exec(frame.name);
++      if (match) {
++        const parsed = new URL(match[1]);
++        const platform = parsed.searchParams.get('platform'),
++          dev = parsed.searchParams.get('dev'),
++          minify = parsed.searchParams.get('minify');
++        if (platform) {
++          options.platform = platform;
++        }
++        if (dev) {
++          options.dev = dev === 'true';
++        }
++        if (minify) {
++          options.minify = minify === 'true';
++        }
++        hadMatch = true;
++        break;
++      }
++    }
++    if (containsExpoDevMenu && !hadMatch) {
++      _cliTools().logger.warn(`Found references to the Expo Dev Menu in your profiling sample.
++You might have accidentally recorded the Expo Dev Menu instead of your own application.
++To work around this, please reload your app twice before starting a profiler recording.`);
++    }
++  } catch (e) {}
++  return options;
++}
++
++//# sourceMappingURL=metroBundleOptions.js.map
+\ No newline at end of file
+diff --git a/node_modules/@react-native-community/cli-hermes/build/profileHermes/metroBundleOptions.js.map b/node_modules/@react-native-community/cli-hermes/build/profileHermes/metroBundleOptions.js.map
+new file mode 100644
+index 0000000..b9b727c
+--- /dev/null
++++ b/node_modules/@react-native-community/cli-hermes/build/profileHermes/metroBundleOptions.js.map
+@@ -0,0 +1 @@
++{"version":3,"names":["getMetroBundleOptions","downloadedProfileFilePath","options","platform","dev","minify","contents","JSON","parse","fs","readFileSync","encoding","matchBundleUrl","containsExpoDevMenu","hadMatch","frame","Object","values","stackFrames","name","includes","match","exec","parsed","URL","searchParams","get","logger","warn","e"],"sources":["../../src/profileHermes/metroBundleOptions.ts"],"sourcesContent":["import {logger} from '@react-native-community/cli-tools';\nimport fs from 'fs';\nimport type {HermesCPUProfile} from 'hermes-profile-transformer/dist/types/HermesProfile';\n\nexport interface MetroBundleOptions {\n  platform: string;\n  dev: boolean;\n  minify: boolean;\n}\n\nexport function getMetroBundleOptions(\n  downloadedProfileFilePath: string,\n): MetroBundleOptions {\n  let options: MetroBundleOptions = {\n    platform: 'android',\n    dev: true,\n    minify: false,\n  };\n\n  try {\n    const contents: HermesCPUProfile = JSON.parse(\n      fs.readFileSync(downloadedProfileFilePath, {\n        encoding: 'utf8',\n      }),\n    );\n    const matchBundleUrl = /^.*\\((.*index\\.bundle.*)\\)/;\n    let containsExpoDevMenu = false;\n    let hadMatch = false;\n    for (const frame of Object.values(contents.stackFrames)) {\n      if (frame.name.includes('EXDevMenuApp')) {\n        containsExpoDevMenu = true;\n      }\n      const match = matchBundleUrl.exec(frame.name);\n      if (match) {\n        const parsed = new URL(match[1]);\n        const platform = parsed.searchParams.get('platform'),\n          dev = parsed.searchParams.get('dev'),\n          minify = parsed.searchParams.get('minify');\n        if (platform) {\n          options.platform = platform;\n        }\n        if (dev) {\n          options.dev = dev === 'true';\n        }\n        if (minify) {\n          options.minify = minify === 'true';\n        }\n\n        hadMatch = true;\n        break;\n      }\n    }\n    if (containsExpoDevMenu && !hadMatch) {\n      logger.warn(`Found references to the Expo Dev Menu in your profiling sample.\nYou might have accidentally recorded the Expo Dev Menu instead of your own application.\nTo work around this, please reload your app twice before starting a profiler recording.`);\n    }\n  } catch (e) {}\n\n  return options;\n}\n"],"mappings":";;;;;;AAAA;EAAA;EAAA;IAAA;EAAA;EAAA;AAAA;AACA;EAAA;EAAA;IAAA;EAAA;EAAA;AAAA;AAAoB;AASb,SAASA,qBAAqB,CACnCC,yBAAiC,EACb;EACpB,IAAIC,OAA2B,GAAG;IAChCC,QAAQ,EAAE,SAAS;IACnBC,GAAG,EAAE,IAAI;IACTC,MAAM,EAAE;EACV,CAAC;EAED,IAAI;IACF,MAAMC,QAA0B,GAAGC,IAAI,CAACC,KAAK,CAC3CC,aAAE,CAACC,YAAY,CAACT,yBAAyB,EAAE;MACzCU,QAAQ,EAAE;IACZ,CAAC,CAAC,CACH;IACD,MAAMC,cAAc,GAAG,4BAA4B;IACnD,IAAIC,mBAAmB,GAAG,KAAK;IAC/B,IAAIC,QAAQ,GAAG,KAAK;IACpB,KAAK,MAAMC,KAAK,IAAIC,MAAM,CAACC,MAAM,CAACX,QAAQ,CAACY,WAAW,CAAC,EAAE;MACvD,IAAIH,KAAK,CAACI,IAAI,CAACC,QAAQ,CAAC,cAAc,CAAC,EAAE;QACvCP,mBAAmB,GAAG,IAAI;MAC5B;MACA,MAAMQ,KAAK,GAAGT,cAAc,CAACU,IAAI,CAACP,KAAK,CAACI,IAAI,CAAC;MAC7C,IAAIE,KAAK,EAAE;QACT,MAAME,MAAM,GAAG,IAAIC,GAAG,CAACH,KAAK,CAAC,CAAC,CAAC,CAAC;QAChC,MAAMlB,QAAQ,GAAGoB,MAAM,CAACE,YAAY,CAACC,GAAG,CAAC,UAAU,CAAC;UAClDtB,GAAG,GAAGmB,MAAM,CAACE,YAAY,CAACC,GAAG,CAAC,KAAK,CAAC;UACpCrB,MAAM,GAAGkB,MAAM,CAACE,YAAY,CAACC,GAAG,CAAC,QAAQ,CAAC;QAC5C,IAAIvB,QAAQ,EAAE;UACZD,OAAO,CAACC,QAAQ,GAAGA,QAAQ;QAC7B;QACA,IAAIC,GAAG,EAAE;UACPF,OAAO,CAACE,GAAG,GAAGA,GAAG,KAAK,MAAM;QAC9B;QACA,IAAIC,MAAM,EAAE;UACVH,OAAO,CAACG,MAAM,GAAGA,MAAM,KAAK,MAAM;QACpC;QAEAS,QAAQ,GAAG,IAAI;QACf;MACF;IACF;IACA,IAAID,mBAAmB,IAAI,CAACC,QAAQ,EAAE;MACpCa,kBAAM,CAACC,IAAI,CAAE;AACnB;AACA,wFAAwF,CAAC;IACrF;EACF,CAAC,CAAC,OAAOC,CAAC,EAAE,CAAC;EAEb,OAAO3B,OAAO;AAChB"}
+\ No newline at end of file
+diff --git a/node_modules/@react-native-community/cli-hermes/build/profileHermes/sourcemapUtils.d.ts b/node_modules/@react-native-community/cli-hermes/build/profileHermes/sourcemapUtils.d.ts
+index f8fdd9a..f01ee84 100644
+--- a/node_modules/@react-native-community/cli-hermes/build/profileHermes/sourcemapUtils.d.ts
++++ b/node_modules/@react-native-community/cli-hermes/build/profileHermes/sourcemapUtils.d.ts
+@@ -1,11 +1,12 @@
+ import { Config } from '@react-native-community/cli-types';
++import { MetroBundleOptions } from './metroBundleOptions';
+ /**
+  * Generate a sourcemap by fetching it from a running metro server
+  */
+-export declare function generateSourcemap(port?: string): Promise<string | undefined>;
++export declare function generateSourcemap(port: string, bundleOptions: MetroBundleOptions): Promise<string | undefined>;
+ /**
+  *
+  * @param ctx
+  */
+-export declare function findSourcemap(ctx: Config, port?: string): Promise<string | undefined>;
++export declare function findSourcemap(ctx: Config, port: string, bundleOptions: MetroBundleOptions): Promise<string | undefined>;
+ //# sourceMappingURL=sourcemapUtils.d.ts.map
+\ No newline at end of file
+diff --git a/node_modules/@react-native-community/cli-hermes/build/profileHermes/sourcemapUtils.d.ts.map b/node_modules/@react-native-community/cli-hermes/build/profileHermes/sourcemapUtils.d.ts.map
+index eb77eaa..29bc6ff 100644
+--- a/node_modules/@react-native-community/cli-hermes/build/profileHermes/sourcemapUtils.d.ts.map
++++ b/node_modules/@react-native-community/cli-hermes/build/profileHermes/sourcemapUtils.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"sourcemapUtils.d.ts","sourceRoot":"","sources":["../../src/profileHermes/sourcemapUtils.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,MAAM,EAAC,MAAM,mCAAmC,CAAC;AAgDzD;;GAEG;AACH,wBAAsB,iBAAiB,CACrC,IAAI,CAAC,EAAE,MAAM,GACZ,OAAO,CAAC,MAAM,GAAG,SAAS,CAAC,CAgB7B;AAED;;;GAGG;AACH,wBAAsB,aAAa,CACjC,GAAG,EAAE,MAAM,EACX,IAAI,CAAC,EAAE,MAAM,GACZ,OAAO,CAAC,MAAM,GAAG,SAAS,CAAC,CAkC7B"}
+\ No newline at end of file
++{"version":3,"file":"sourcemapUtils.d.ts","sourceRoot":"","sources":["../../src/profileHermes/sourcemapUtils.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,MAAM,EAAC,MAAM,mCAAmC,CAAC;AAOzD,OAAO,EAAC,kBAAkB,EAAC,MAAM,sBAAsB,CAAC;AA0CxD;;GAEG;AACH,wBAAsB,iBAAiB,CACrC,IAAI,EAAE,MAAM,EACZ,aAAa,EAAE,kBAAkB,GAChC,OAAO,CAAC,MAAM,GAAG,SAAS,CAAC,CAgB7B;AAED;;;GAGG;AACH,wBAAsB,aAAa,CACjC,GAAG,EAAE,MAAM,EACX,IAAI,EAAE,MAAM,EACZ,aAAa,EAAE,kBAAkB,GAChC,OAAO,CAAC,MAAM,GAAG,SAAS,CAAC,CAkC7B"}
+\ No newline at end of file
+diff --git a/node_modules/@react-native-community/cli-hermes/build/profileHermes/sourcemapUtils.js b/node_modules/@react-native-community/cli-hermes/build/profileHermes/sourcemapUtils.js
+index 60de3e4..e13a312 100644
+--- a/node_modules/@react-native-community/cli-hermes/build/profileHermes/sourcemapUtils.js
++++ b/node_modules/@react-native-community/cli-hermes/build/profileHermes/sourcemapUtils.js
+@@ -57,12 +57,15 @@ function writeJsonSync(targetPath, data) {
+     throw new (_cliTools().CLIError)(`Failed to write json to ${targetPath}`, e);
+   }
+ }
+-async function getSourcemapFromServer(port) {
++async function getSourcemapFromServer(port, {
++  platform,
++  dev,
++  minify
++}) {
+   _cliTools().logger.debug('Getting source maps from Metro packager server');
+-  const DEBUG_SERVER_PORT = port || '8081';
+   const IP_ADDRESS = _ip().default.address();
+-  const PLATFORM = 'android';
+-  const requestURL = `http://${IP_ADDRESS}:${DEBUG_SERVER_PORT}/index.map?platform=${PLATFORM}&dev=true`;
++  const requestURL = `http://${IP_ADDRESS}:${port}/index.map?platform=${platform}&dev=${dev}&minify=${minify}`;
++  _cliTools().logger.debug(`Downloading from ${requestURL}`);
+   try {
+     const {
+       data
+@@ -77,10 +80,10 @@ async function getSourcemapFromServer(port) {
+ /**
+  * Generate a sourcemap by fetching it from a running metro server
+  */
+-async function generateSourcemap(port) {
++async function generateSourcemap(port, bundleOptions) {
+   // Fetch the source map to a temp directory
+   const sourceMapPath = getTempFilePath('index.map');
+-  const sourceMapResult = await getSourcemapFromServer(port);
++  const sourceMapResult = await getSourcemapFromServer(port, bundleOptions);
+   if (sourceMapResult) {
+     _cliTools().logger.debug('Using source maps from Metro packager server');
+     writeJsonSync(sourceMapPath, sourceMapResult);
+@@ -96,7 +99,7 @@ async function generateSourcemap(port) {
+  *
+  * @param ctx
+  */
+-async function findSourcemap(ctx, port) {
++async function findSourcemap(ctx, port, bundleOptions) {
+   const intermediateBuildPath = _path().default.join(ctx.root, 'android', 'app', 'build', 'intermediates', 'sourcemaps', 'react', 'debug', 'index.android.bundle.packager.map');
+   const generatedBuildPath = _path().default.join(ctx.root, 'android', 'app', 'build', 'generated', 'sourcemaps', 'react', 'debug', 'index.android.bundle.map');
+   if (_fs().default.existsSync(generatedBuildPath)) {
+@@ -106,7 +109,7 @@ async function findSourcemap(ctx, port) {
+     _cliTools().logger.debug(`Getting the source map from ${intermediateBuildPath}`);
+     return intermediateBuildPath;
+   } else {
+-    return generateSourcemap(port);
++    return generateSourcemap(port, bundleOptions);
+   }
+ }
+ 
+diff --git a/node_modules/@react-native-community/cli-hermes/build/profileHermes/sourcemapUtils.js.map b/node_modules/@react-native-community/cli-hermes/build/profileHermes/sourcemapUtils.js.map
+index b9ac50f..a50b131 100644
+--- a/node_modules/@react-native-community/cli-hermes/build/profileHermes/sourcemapUtils.js.map
++++ b/node_modules/@react-native-community/cli-hermes/build/profileHermes/sourcemapUtils.js.map
+@@ -1 +1 @@
+-{"version":3,"names":["getTempFilePath","filename","path","join","os","tmpdir","writeJsonSync","targetPath","data","json","JSON","stringify","e","CLIError","fs","writeFileSync","getSourcemapFromServer","port","logger","debug","DEBUG_SERVER_PORT","IP_ADDRESS","ip","address","PLATFORM","requestURL","fetch","undefined","generateSourcemap","sourceMapPath","sourceMapResult","error","findSourcemap","ctx","intermediateBuildPath","root","generatedBuildPath","existsSync"],"sources":["../../src/profileHermes/sourcemapUtils.ts"],"sourcesContent":["import {Config} from '@react-native-community/cli-types';\nimport {logger, CLIError, fetch} from '@react-native-community/cli-tools';\nimport fs from 'fs';\nimport path from 'path';\nimport os from 'os';\nimport {SourceMap} from 'hermes-profile-transformer';\nimport ip from 'ip';\n\nfunction getTempFilePath(filename: string) {\n  return path.join(os.tmpdir(), filename);\n}\n\nfunction writeJsonSync(targetPath: string, data: any) {\n  let json;\n  try {\n    json = JSON.stringify(data);\n  } catch (e) {\n    throw new CLIError(\n      `Failed to serialize data to json before writing to ${targetPath}`,\n      e,\n    );\n  }\n\n  try {\n    fs.writeFileSync(targetPath, json, 'utf-8');\n  } catch (e) {\n    throw new CLIError(`Failed to write json to ${targetPath}`, e);\n  }\n}\n\nasync function getSourcemapFromServer(\n  port?: string,\n): Promise<SourceMap | undefined> {\n  logger.debug('Getting source maps from Metro packager server');\n  const DEBUG_SERVER_PORT = port || '8081';\n  const IP_ADDRESS = ip.address();\n  const PLATFORM = 'android';\n\n  const requestURL = `http://${IP_ADDRESS}:${DEBUG_SERVER_PORT}/index.map?platform=${PLATFORM}&dev=true`;\n  try {\n    const {data} = await fetch(requestURL);\n    return data as SourceMap;\n  } catch (e) {\n    logger.debug(`Failed to fetch source map from \"${requestURL}\"`);\n    return undefined;\n  }\n}\n\n/**\n * Generate a sourcemap by fetching it from a running metro server\n */\nexport async function generateSourcemap(\n  port?: string,\n): Promise<string | undefined> {\n  // Fetch the source map to a temp directory\n  const sourceMapPath = getTempFilePath('index.map');\n  const sourceMapResult = await getSourcemapFromServer(port);\n\n  if (sourceMapResult) {\n    logger.debug('Using source maps from Metro packager server');\n    writeJsonSync(sourceMapPath, sourceMapResult);\n    logger.debug(\n      `Successfully obtained the source map and stored it in ${sourceMapPath}`,\n    );\n    return sourceMapPath;\n  } else {\n    logger.error('Cannot obtain source maps from Metro packager server');\n    return undefined;\n  }\n}\n\n/**\n *\n * @param ctx\n */\nexport async function findSourcemap(\n  ctx: Config,\n  port?: string,\n): Promise<string | undefined> {\n  const intermediateBuildPath = path.join(\n    ctx.root,\n    'android',\n    'app',\n    'build',\n    'intermediates',\n    'sourcemaps',\n    'react',\n    'debug',\n    'index.android.bundle.packager.map',\n  );\n\n  const generatedBuildPath = path.join(\n    ctx.root,\n    'android',\n    'app',\n    'build',\n    'generated',\n    'sourcemaps',\n    'react',\n    'debug',\n    'index.android.bundle.map',\n  );\n\n  if (fs.existsSync(generatedBuildPath)) {\n    logger.debug(`Getting the source map from ${generateSourcemap}`);\n    return generatedBuildPath;\n  } else if (fs.existsSync(intermediateBuildPath)) {\n    logger.debug(`Getting the source map from ${intermediateBuildPath}`);\n    return intermediateBuildPath;\n  } else {\n    return generateSourcemap(port);\n  }\n}\n"],"mappings":"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"}
+\ No newline at end of file
++{"version":3,"names":["getTempFilePath","filename","path","join","os","tmpdir","writeJsonSync","targetPath","data","json","JSON","stringify","e","CLIError","fs","writeFileSync","getSourcemapFromServer","port","platform","dev","minify","logger","debug","IP_ADDRESS","ip","address","requestURL","fetch","undefined","generateSourcemap","bundleOptions","sourceMapPath","sourceMapResult","error","findSourcemap","ctx","intermediateBuildPath","root","generatedBuildPath","existsSync"],"sources":["../../src/profileHermes/sourcemapUtils.ts"],"sourcesContent":["import {Config} from '@react-native-community/cli-types';\nimport {logger, CLIError, fetch} from '@react-native-community/cli-tools';\nimport fs from 'fs';\nimport path from 'path';\nimport os from 'os';\nimport {SourceMap} from 'hermes-profile-transformer';\nimport ip from 'ip';\nimport {MetroBundleOptions} from './metroBundleOptions';\n\nfunction getTempFilePath(filename: string) {\n  return path.join(os.tmpdir(), filename);\n}\n\nfunction writeJsonSync(targetPath: string, data: any) {\n  let json;\n  try {\n    json = JSON.stringify(data);\n  } catch (e) {\n    throw new CLIError(\n      `Failed to serialize data to json before writing to ${targetPath}`,\n      e,\n    );\n  }\n\n  try {\n    fs.writeFileSync(targetPath, json, 'utf-8');\n  } catch (e) {\n    throw new CLIError(`Failed to write json to ${targetPath}`, e);\n  }\n}\n\nasync function getSourcemapFromServer(\n  port: string,\n  {platform, dev, minify}: MetroBundleOptions,\n): Promise<SourceMap | undefined> {\n  logger.debug('Getting source maps from Metro packager server');\n  const IP_ADDRESS = ip.address();\n\n  const requestURL = `http://${IP_ADDRESS}:${port}/index.map?platform=${platform}&dev=${dev}&minify=${minify}`;\n  logger.debug(`Downloading from ${requestURL}`);\n  try {\n    const {data} = await fetch(requestURL);\n    return data as SourceMap;\n  } catch (e) {\n    logger.debug(`Failed to fetch source map from \"${requestURL}\"`);\n    return undefined;\n  }\n}\n\n/**\n * Generate a sourcemap by fetching it from a running metro server\n */\nexport async function generateSourcemap(\n  port: string,\n  bundleOptions: MetroBundleOptions,\n): Promise<string | undefined> {\n  // Fetch the source map to a temp directory\n  const sourceMapPath = getTempFilePath('index.map');\n  const sourceMapResult = await getSourcemapFromServer(port, bundleOptions);\n\n  if (sourceMapResult) {\n    logger.debug('Using source maps from Metro packager server');\n    writeJsonSync(sourceMapPath, sourceMapResult);\n    logger.debug(\n      `Successfully obtained the source map and stored it in ${sourceMapPath}`,\n    );\n    return sourceMapPath;\n  } else {\n    logger.error('Cannot obtain source maps from Metro packager server');\n    return undefined;\n  }\n}\n\n/**\n *\n * @param ctx\n */\nexport async function findSourcemap(\n  ctx: Config,\n  port: string,\n  bundleOptions: MetroBundleOptions,\n): Promise<string | undefined> {\n  const intermediateBuildPath = path.join(\n    ctx.root,\n    'android',\n    'app',\n    'build',\n    'intermediates',\n    'sourcemaps',\n    'react',\n    'debug',\n    'index.android.bundle.packager.map',\n  );\n\n  const generatedBuildPath = path.join(\n    ctx.root,\n    'android',\n    'app',\n    'build',\n    'generated',\n    'sourcemaps',\n    'react',\n    'debug',\n    'index.android.bundle.map',\n  );\n\n  if (fs.existsSync(generatedBuildPath)) {\n    logger.debug(`Getting the source map from ${generateSourcemap}`);\n    return generatedBuildPath;\n  } else if (fs.existsSync(intermediateBuildPath)) {\n    logger.debug(`Getting the source map from ${intermediateBuildPath}`);\n    return intermediateBuildPath;\n  } else {\n    return generateSourcemap(port, bundleOptions);\n  }\n}\n"],"mappings":"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"}
+\ No newline at end of file
+diff --git a/node_modules/@react-native-community/cli-hermes/yalc.sig b/node_modules/@react-native-community/cli-hermes/yalc.sig
+new file mode 100644
+index 0000000..aed2228
+--- /dev/null
++++ b/node_modules/@react-native-community/cli-hermes/yalc.sig
+@@ -0,0 +1 @@
++21f00e1bd668eb85876bb3f9e7e25161
+\ No newline at end of file
