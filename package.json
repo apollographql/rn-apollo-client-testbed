@@ -25,6 +25,7 @@
     "expo-router": "^1.0.0-rc1",
     "expo-splash-screen": "~0.17.5",
     "expo-status-bar": "~1.4.2",
+    "metro-config": "^0.73.8",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-native": "0.70.5",
@@ -41,6 +42,7 @@
     "@expo/ngrok": "^4.1.0",
     "@graphql-codegen/cli": "^3.0.0",
     "@graphql-codegen/client-preset": "^2.0.0",
+    "@phryneas/process-profile-sourcemaps": "^0.0.5",
     "expo-dev-client": "~2.0.1",
     "graphql": "^15.8.0",
     "patch-package": "^6.5.1"
