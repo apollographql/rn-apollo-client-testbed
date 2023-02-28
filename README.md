@@ -68,6 +68,10 @@ npx @phryneas/process-profile-sourcemaps ./sampling-profiler-traceXXXXXXXXXXXXXX
 You can use Flipper to look at both system and application logs, as well as debugging (like above). Flipper also includes the React Devtools and a bunch of other plugins.
 ⚠️ if you started Flipper once, your application might crash whenever you start it without Flipper running. You will need to uninstall & reinstall the app to get it working without Flipper afterward.
 
+#### Flipper: React Native Apollo Devtools
+
+This repo is set up for the [Flipper React Native Apollo Devtools](https://github.com/razorpay/react-native-apollo-devtools), so if you are using Flipper, you can install and enable the `react-native-apollo-devtools` plugin.
+
 ### Inspecting Network Traffic
 
 You can use the VSCode “React Native” extension to debug the app & inspect network traffic.

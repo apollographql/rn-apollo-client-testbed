@@ -21,7 +21,7 @@
     "@types/react-native": "~0.70.6",
     "expo": "~47.0.12",
     "expo-constants": "~14.0.2",
-    "expo-linking": "~3.3.0",
+    "expo-linking": "~3.3.1",
     "expo-router": "^1.0.0-rc1",
     "expo-splash-screen": "~0.17.5",
     "expo-status-bar": "~1.4.2",
@@ -45,7 +45,9 @@
     "@phryneas/process-profile-sourcemaps": "^0.0.5",
     "expo-dev-client": "~2.0.1",
     "graphql": "^15.8.0",
-    "patch-package": "^6.5.1"
+    "patch-package": "^6.5.1",
+    "react-native-apollo-devtools-client": "^1.0.4",
+    "react-native-flipper": "^0.182.0"
   },
   "resolutions": {
     "@react-native-community/cli-hermes": "10.1.3",
