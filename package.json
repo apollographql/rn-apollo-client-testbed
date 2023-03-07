@@ -20,6 +20,7 @@
     "@types/react": "~18.0.24",
     "@types/react-native": "~0.70.6",
     "expo": "~47.0.12",
+    "expo-community-flipper": "^48.0.0",
     "expo-constants": "~14.0.2",
     "expo-linking": "~3.3.1",
     "expo-router": "^1.0.0-rc1",
