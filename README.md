@@ -5,7 +5,13 @@ The goal of this repository is to act as a starting point for reproductions, ben
 ## Preparations
 
 * clone https://github.com/apollographql/rn-apollo-client-testbed
-* npm install
+* `npm install`
+
+### Quick Start (Android and iOS)
+
+If running a development-only build is satisfactory, you can start the app with `npm run dev`.
+
+If your reproduction requires performance benchmarking or would otherwise benefit from running in an emulator/simualtor against a production build of the demo application, please see the Getting Started sections below.
 
 ### Getting Started (Android)
 
@@ -13,7 +19,7 @@ The goal of this repository is to act as a starting point for reproductions, ben
   ![an image showing the "Emulators" button](./assets/readme/emulator.png)
 * Download the latest “Android Internal Distribution build” from the [Releases](https://github.com/apollographql/rn-apollo-client-testbed/releases)
 * Install & start the app
-* npm run start (will run expo start --dev-client --tunnel)
+* `npm run start` (will run `expo start --dev-client --tunnel`)
 * Scan the QR code
 * The app starts. You can now locally modify JavaScript sources. Unless new native dependencies are added, you do not need to rebuild the app.
 
@@ -23,7 +29,7 @@ The goal of this repository is to act as a starting point for reproductions, ben
 * Download the latest “iOS Simulator build” from the [Releases](https://github.com/apollographql/rn-apollo-client-testbed/releases)
 * unzip it and drag the unpacked “rnapolloclienttestbed” file onto the simulator
 * Start the app
-* npm run start  (will run expo start --dev-client --tunnel)
+* `npm run start` (will run `expo start --dev-client --tunnel`)
 * connect to http://localhost:8081
 * The app starts. You can now locally modify JavaScript sources. Unless new native dependencies are added, you do not need to rebuild the app.
 

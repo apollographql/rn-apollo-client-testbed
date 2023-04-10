@@ -7,6 +7,7 @@
     "build:ios:development": "npx eas-cli build --profile=development --platform=ios",
     "build:ios:simulator": "npx eas-cli build --profile=simulator --platform=ios",
     "start": "expo start --dev-client --tunnel",
+    "dev": "expo start",
     "codegen": "graphql-codegen",
     "download-profile": "test -d android || expo prebuild; react-native profile-hermes .",
     "android": "echo 'use the CI-built development build and run \"npm run start\"'",
