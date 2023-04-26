@@ -1,6 +1,7 @@
-# React Native Example Project
-
-The goal of this repository is to act as a starting point for reproductions, benchmarking and debugging.
+<div align="center">
+  <img src="./image.jpg" alt="Apollo Client and React Native Example" title="Apollo Client and React Native Example" width="600">
+  <p>A starting point for reproductions, benchmarking and debugging applications built with <a href="https://reactnative.dev/">React Native</a> and <a href="https://github.com/apollographql/apollo-client">Apollo Client</a>.</p>
+</div>
 
 ## Preparations
 
