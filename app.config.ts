@@ -1,7 +1,5 @@
-// @ts-check
 import {
   withPlugins,
-  withGradleProperties,
   ConfigPlugin,
   withAppBuildGradle,
 } from "expo/config-plugins";
@@ -48,7 +46,6 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       },
       owner: "prometheus-web",
       jsEngine: "hermes",
-      plugins: ["expo-community-flipper"],
     },
     [withSourceMapsInDev]
   );
