@@ -11,7 +11,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       ...config,
       name: "rn-apollo-client-testbed",
       slug: "rn-apollo-client-testbed",
-      version: "1.0.0",
+      version: "1.0.49",
       orientation: "portrait",
       icon: "./assets/icon.png",
       userInterfaceStyle: "light",
