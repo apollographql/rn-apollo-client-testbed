@@ -1,7 +1,5 @@
-// @ts-check
 import {
   withPlugins,
-  withGradleProperties,
   ConfigPlugin,
   withAppBuildGradle,
 } from "expo/config-plugins";
@@ -13,7 +11,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       ...config,
       name: "rn-apollo-client-testbed",
       slug: "rn-apollo-client-testbed",
-      version: "1.0.0",
+      version: "1.0.49",
       orientation: "portrait",
       icon: "./assets/icon.png",
       userInterfaceStyle: "light",
@@ -48,7 +46,16 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       },
       owner: "prometheus-web",
       jsEngine: "hermes",
-      plugins: ["expo-community-flipper"],
+      plugins: [
+        [
+          "expo-build-properties",
+          {
+            ios: {
+              flipper: true,
+            },
+          },
+        ],
+      ],
     },
     [withSourceMapsInDev]
   );
