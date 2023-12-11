@@ -45,8 +45,7 @@
     "expo-dev-client": "~2.4.12",
     "graphql": "^15.8.0",
     "patch-package": "^6.5.1",
-    "react-native-apollo-devtools-client": "^1.0.4",
-    "react-native-flipper": "^0.212.0"
+    "react-native-apollo-devtools-client": "^1.0.4"
   },
   "private": true
 }
