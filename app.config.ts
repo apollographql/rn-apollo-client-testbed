@@ -4,7 +4,6 @@ import {
   withAppBuildGradle,
 } from "expo/config-plugins";
 import { ExpoConfig, ConfigContext } from "expo/config";
-import { withBuildProperties } from "expo-build-properties";
 
 export default ({ config }: ConfigContext): ExpoConfig => {
   return withPlugins(
@@ -47,8 +46,18 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       },
       owner: "prometheus-web",
       jsEngine: "hermes",
+      plugins: [
+        [
+          "expo-build-properties",
+          {
+            ios: {
+              flipper: true,
+            },
+          },
+        ],
+      ],
     },
-    [withSourceMapsInDev, withFlipper]
+    [withSourceMapsInDev]
   );
 };
 
@@ -64,11 +73,4 @@ project.ext.react = [
 `
     );
     return config;
-  });
-
-const withFlipper: ConfigPlugin = (config) =>
-  withBuildProperties(config, {
-    ios: {
-      flipper: true,
-    },
   });
