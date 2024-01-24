@@ -3,6 +3,10 @@
   <p>A starting point for reproductions, benchmarking and debugging applications built with <a href="https://reactnative.dev/">React Native</a> and <a href="https://github.com/apollographql/apollo-client">Apollo Client</a>.</p>
 </div>
 
+| ☑️  Apollo Client User Survey |
+| :----- |
+| What do you like best about Apollo Client? What needs to be improved? Please tell us by taking a [one-minute survey](https://docs.google.com/forms/d/e/1FAIpQLSczNDXfJne3ZUOXjk9Ursm9JYvhTh1_nFTDfdq3XBAFWCzplQ/viewform?usp=pp_url&entry.1170701325=Apollo+Client&entry.204965213=Readme). Your responses will help us understand Apollo Client usage and allow us to serve you better. |
+
 ## Preparations
 
 * clone https://github.com/apollographql/rn-apollo-client-testbed
