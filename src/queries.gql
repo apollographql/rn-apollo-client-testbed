@@ -2,9 +2,11 @@ query NextLaunch {
   launchNext {
     id
     mission_name
-    launch_date_unix
-    launch_site {
-      site_name
+    ... @defer {
+      launch_date_unix
+      launch_site {
+        site_name
+      }
     }
   }
 }
