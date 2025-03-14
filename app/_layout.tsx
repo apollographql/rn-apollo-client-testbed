@@ -1,31 +1,48 @@
 import {
   ApolloClient,
   ApolloLink,
-  ApolloProvider,
   HttpLink,
   InMemoryCache,
 } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client/react";
+import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
+import { tap } from "rxjs";
 import { ThemeProvider } from "@shopify/restyle";
 import { Stack } from "expo-router";
 import theme from "../src/components/theme";
 import { connectApolloClientToVSCodeDevTools } from "@apollo/client-devtools-vscode";
 import { Platform } from "react-native";
 
-import { polyfill as polyfillEncoding } from "react-native-polyfill-globals/src/encoding";
-import { polyfill as polyfillReadableStream } from "react-native-polyfill-globals/src/readable-stream";
-
-polyfillEncoding();
-polyfillReadableStream();
+import "react-native-polyfill-globals/auto";
 
 const client = new ApolloClient({
-  link: new ApolloLink((operation, forward) =>
-    forward(operation).map(function logChunks(chunk) {
-      console.log(chunk);
-      return chunk;
-    })
-  ).concat(
+  link: new ApolloLink((operation, forward) => {
+    console.log(`Starting request for ${operation.operationName}`);
+    return forward(operation).pipe(
+      tap({
+        next(value) {
+          console.log(
+            `Received response for ${operation.operationName}:`,
+            value
+          );
+        },
+        error(err) {
+          console.error(
+            `Error occurred during request for ${operation.operationName}:`,
+            err
+          );
+        },
+        complete() {
+          console.log(`Completed request for ${operation.operationName}`);
+        },
+      })
+    );
+  }).concat(
     new HttpLink({
       uri: "https://main--spacex-l4uc6p.apollographos.net/graphql",
+      fetchOptions: {
+        reactNative: { textStreaming: true },
+      },
     })
   ),
   cache: new InMemoryCache(),
@@ -35,6 +52,8 @@ const client = new ApolloClient({
 });
 
 if (__DEV__) {
+  loadErrorMessages();
+  loadDevMessages();
   connectApolloClientToVSCodeDevTools(
     client,
     Platform.OS === "android" ? "ws://10.0.2.2:7095" : "ws://localhost:7095"

@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { Stack } from "expo-router";
 import { useMemo } from "react";
 import { FlatList } from "react-native-gesture-handler";
@@ -12,7 +12,9 @@ export default function Missions() {
     () =>
       (result.data?.launches ?? []).filter(isDefined).map((launch) => ({
         ...launch,
-        launch_date_unix: new Date(launch.launch_date_unix * 1000).toLocaleDateString(),
+        launch_date_unix: new Date(
+          launch.launch_date_unix * 1000
+        ).toLocaleDateString(),
       })),
     [result.data?.launches]
   );
