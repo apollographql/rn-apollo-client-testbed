@@ -1,17 +1,23 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { ThemeProvider } from "@shopify/restyle";
 import { Stack } from "expo-router";
-import { Box, Text } from "../src/components";
 import theme from "../src/components/theme";
-import { apolloDevToolsInit } from "react-native-apollo-devtools-client";
+import { connectApolloClientToVSCodeDevTools } from "@apollo/client-devtools-vscode";
+import { Platform } from "react-native";
 
 const client = new ApolloClient({
   uri: "https://main--spacex-l4uc6p.apollographos.net/graphql",
   cache: new InMemoryCache(),
+  devtools: {
+    name: `SpaceX launches (${Platform.OS == "android" ? "Android" : "iOS"})`,
+  },
 });
 
 if (__DEV__) {
-  apolloDevToolsInit(client);
+  connectApolloClientToVSCodeDevTools(
+    client,
+    Platform.OS === "android" ? "ws://10.0.2.2:7095" : "ws://localhost:7095"
+  );
 }
 
 export default function Layout() {
