@@ -1,12 +1,33 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import {
+  ApolloClient,
+  ApolloLink,
+  ApolloProvider,
+  HttpLink,
+  InMemoryCache,
+} from "@apollo/client";
 import { ThemeProvider } from "@shopify/restyle";
 import { Stack } from "expo-router";
 import theme from "../src/components/theme";
 import { connectApolloClientToVSCodeDevTools } from "@apollo/client-devtools-vscode";
 import { Platform } from "react-native";
 
+import { polyfill as polyfillEncoding } from "react-native-polyfill-globals/src/encoding";
+import { polyfill as polyfillReadableStream } from "react-native-polyfill-globals/src/readable-stream";
+
+polyfillEncoding();
+polyfillReadableStream();
+
 const client = new ApolloClient({
-  uri: "https://main--spacex-l4uc6p.apollographos.net/graphql",
+  link: new ApolloLink((operation, forward) =>
+    forward(operation).map(function logChunks(chunk) {
+      console.log(chunk);
+      return chunk;
+    })
+  ).concat(
+    new HttpLink({
+      uri: "https://main--spacex-l4uc6p.apollographos.net/graphql",
+    })
+  ),
   cache: new InMemoryCache(),
   devtools: {
     name: `SpaceX launches (${Platform.OS == "android" ? "Android" : "iOS"})`,
