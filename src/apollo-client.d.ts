@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import "@apollo/client";
 import { HttpLink } from "@apollo/client";
 import { Defer20220824Handler } from "@apollo/client/incremental";
