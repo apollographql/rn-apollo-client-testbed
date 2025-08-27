@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@apollo/client": "^4.0.1",
-    "@apollo/client-devtools-vscode": "https://pkg.pr.new/apollographql/apollo-client-devtools/@apollo/client-devtools-vscode@1698",
+    "@apollo/client-devtools-vscode": "4.20.1",
     "@expo/vector-icons": "^14.1.0",
     "@react-navigation/bottom-tabs": "^7.3.10",
     "@react-navigation/elements": "^2.3.8",
