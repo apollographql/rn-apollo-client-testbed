@@ -4,8 +4,11 @@ import { Box, Link, NextLaunchButton, Text } from "@/components";
 import { LaunchDetailDocument } from "@/queries";
 
 export default function LaunchDetails() {
-  const { id } = useLocalSearchParams();
-  const result = useQuery(LaunchDetailDocument, { variables: { id } });
+  const { id } = useLocalSearchParams<"/launch/[id]">();
+
+  const result = useQuery(LaunchDetailDocument, {
+    variables: { id },
+  });
   const launch = result.data?.launch;
   return (
     <>

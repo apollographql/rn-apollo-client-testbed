@@ -32,9 +32,11 @@ export function NextLaunchButton({
     return nextLaunch;
   }, [launches, currentLaunchId]);
 
-  return (
-    <Link asChild href={`/launch/${nextLaunch?.id}`}>
+  return nextLaunch ? (
+    <Link asChild href={`/launch/${nextLaunch.id}`}>
       <Button label="Next Launch" />
     </Link>
+  ) : (
+    <Button label="No next launch" disabled />
   );
 }
