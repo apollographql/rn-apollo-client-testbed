@@ -27,15 +27,19 @@ const client = new ApolloClient({
 if (__DEV__) {
   // set up the Apollo Client VSCode DevTools connection
   // see https://www.apollographql.com/docs/react/development-testing/developer-tooling#apollo-client-devtools-in-vs-code
-  if (Platform.OS === "android") {
-    // in the Android emulator, "10.0.2.2" points to the host machine
-    // if you are using a physical device, you might need to replace this
-    // with `127.0.0.` and set up port forwarding
-    connectApolloClientToVSCodeDevTools(client, "ws://10.0.2.2:7095");
-  } else if (Platform.OS === "ios") {
-    connectApolloClientToVSCodeDevTools(client, "ws://localhost:7095");
+  try {
+    if (Platform.OS === "android") {
+      // in the Android emulator, "10.0.2.2" points to the host machine
+      // if you are using a physical device, you might need to replace this
+      // with `127.0.0.` and set up port forwarding
+      connectApolloClientToVSCodeDevTools(client, "ws://10.0.2.2:7095");
+    } else if (Platform.OS === "ios") {
+      connectApolloClientToVSCodeDevTools(client, "ws://localhost:7095");
+    }
+    // in web, just use the browser devtools, no need for the VSCode DevTools
+  } catch (e) {
+    console.warn("Could not connect to Apollo Client VSCode DevTools", e);
   }
-  // in web, just use the browser devtools, no need for the VSCode DevTools
 }
 
 export default function Layout() {
