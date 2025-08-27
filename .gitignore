@@ -42,3 +42,4 @@ yarn-error.*
 .yalc
 yalc.lock
 sampling-profiler*
+*.apk

@@ -4,7 +4,7 @@ import { LocalState } from "@apollo/client/local-state";
 import { ApolloProvider } from "@apollo/client/react";
 import { ThemeProvider } from "@shopify/restyle";
 import { Stack } from "expo-router";
-import theme from "@/src/components/theme";
+import theme from "@/components/theme";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 import { useFonts } from "expo-font";
@@ -42,7 +42,6 @@ export default function Layout() {
         />
         <GestureHandlerRootView>
           <Stack
-            initialRouteName="index"
             screenOptions={{
               headerStyle: {
                 backgroundColor: theme.colors.alternativeBackground,

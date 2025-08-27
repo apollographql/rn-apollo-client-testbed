@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client/react";
 import { useMemo } from "react";
-import { LaunchListDocument } from "../queries";
-import { isDefined } from "../utils";
+import { LaunchListDocument } from "@/queries";
+import { isDefined } from "@/utils";
 import { Button } from "./Button";
 import { Link } from "./Link";
 
