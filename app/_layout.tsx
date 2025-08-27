@@ -4,8 +4,11 @@ import { LocalState } from "@apollo/client/local-state";
 import { ApolloProvider } from "@apollo/client/react";
 import { ThemeProvider } from "@shopify/restyle";
 import { Stack } from "expo-router";
-import theme from "../src/components/theme";
+import theme from "@/src/components/theme";
 import { StatusBar } from "expo-status-bar";
+import "react-native-reanimated";
+import { useFonts } from "expo-font";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
@@ -21,6 +24,15 @@ if (__DEV__) {
 }
 
 export default function Layout() {
+  const [loaded] = useFonts({
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+  });
+
+  if (!loaded) {
+    // Async font loading only occurs in development.
+    return null;
+  }
+
   return (
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
@@ -28,17 +40,19 @@ export default function Layout() {
           style="auto"
           backgroundColor={theme.colors.alternativeBackground}
         />
-        <Stack
-          initialRouteName="index"
-          screenOptions={{
-            headerStyle: {
-              backgroundColor: theme.colors.alternativeBackground,
-            },
-            headerTitleStyle: {
-              color: theme.colors.secondaryText,
-            },
-          }}
-        />
+        <GestureHandlerRootView>
+          <Stack
+            initialRouteName="index"
+            screenOptions={{
+              headerStyle: {
+                backgroundColor: theme.colors.alternativeBackground,
+              },
+              headerTitleStyle: {
+                color: theme.colors.secondaryText,
+              },
+            }}
+          />
+        </GestureHandlerRootView>
       </ThemeProvider>
     </ApolloProvider>
   );

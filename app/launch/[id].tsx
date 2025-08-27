@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client/react";
-import { Stack, useLocalSearchParams, useSegments } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 import { Box, Link, NextLaunchButton, Text } from "../../src/components";
 import { LaunchDetailDocument } from "../../src/queries";
 

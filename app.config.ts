@@ -13,11 +13,12 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       slug: "rn-apollo-client-testbed",
       version: "1.0.49",
       orientation: "portrait",
-      icon: "./assets/icon.png",
+      icon: "./assets/images/icon.png",
       userInterfaceStyle: "light",
+      newArchEnabled: true,
       scheme: "rn-apollo-client-testbed",
       splash: {
-        image: "./assets/splash.png",
+        image: "./assets/images/splash-icon.png",
         resizeMode: "contain",
         backgroundColor: "#ffffff",
       },
@@ -31,14 +32,14 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       },
       android: {
         adaptiveIcon: {
-          foregroundImage: "./assets/adaptive-icon.png",
+          foregroundImage: "./assets/images/adaptive-icon.png",
           backgroundColor: "#FFFFFF",
         },
         edgeToEdgeEnabled: true,
         package: "apollo.prometheus.testbed",
       },
       web: {
-        favicon: "./assets/favicon.png",
+        favicon: "./assets/images/favicon.png",
       },
       extra: {
         eas: {
@@ -48,15 +49,20 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       owner: "prometheus-web",
       jsEngine: "hermes",
       plugins: [
+        "expo-router",
         [
-          "expo-build-properties",
+          "expo-splash-screen",
           {
-            ios: {
-              flipper: true,
-            },
+            image: "./assets/images/splash-icon.png",
+            imageWidth: 200,
+            resizeMode: "contain",
+            backgroundColor: "#ffffff",
           },
         ],
       ],
+      experiments: {
+        typedRoutes: true,
+      },
     },
     [withSourceMapsInDev]
   );
