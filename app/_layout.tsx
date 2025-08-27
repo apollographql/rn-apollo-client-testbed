@@ -1,27 +1,36 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
+import { Defer20220824Handler } from "@apollo/client/incremental";
+import { LocalState } from "@apollo/client/local-state";
+import { ApolloProvider } from "@apollo/client/react";
 import { ThemeProvider } from "@shopify/restyle";
 import { Stack } from "expo-router";
-import { Box, Text } from "../src/components";
 import theme from "../src/components/theme";
-import { apolloDevToolsInit } from "react-native-apollo-devtools-client";
+import { StatusBar } from "expo-status-bar";
 
 const client = new ApolloClient({
-  uri: "https://main--spacex-l4uc6p.apollographos.net/graphql",
   cache: new InMemoryCache(),
+  link: new HttpLink({
+    uri: "https://main--spacex-l4uc6p.apollographos.net/graphql",
+  }),
+  localState: new LocalState({}),
+  incrementalHandler: new Defer20220824Handler(),
 });
 
 if (__DEV__) {
-  apolloDevToolsInit(client);
+  // init devtools
 }
 
 export default function Layout() {
   return (
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
+        <StatusBar
+          style="auto"
+          backgroundColor={theme.colors.alternativeBackground}
+        />
         <Stack
           initialRouteName="index"
           screenOptions={{
-            statusBarColor: theme.colors.alternativeBackground,
             headerStyle: {
               backgroundColor: theme.colors.alternativeBackground,
             },

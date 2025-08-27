@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { Stack } from "expo-router";
 import { Text, Card, Box, Link } from "../src/components";
 import { NextLaunchDocument } from "../src/queries";

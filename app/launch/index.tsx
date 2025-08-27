@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { Stack } from "expo-router";
 import { useMemo } from "react";
 import { FlatList } from "react-native-gesture-handler";

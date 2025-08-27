@@ -34,6 +34,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
           foregroundImage: "./assets/adaptive-icon.png",
           backgroundColor: "#FFFFFF",
         },
+        edgeToEdgeEnabled: true,
         package: "apollo.prometheus.testbed",
       },
       web: {
