@@ -9,6 +9,8 @@ import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { connectApolloClientToVSCodeDevTools } from "@apollo/client-devtools-vscode";
+import { Platform } from "react-native";
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
@@ -17,10 +19,23 @@ const client = new ApolloClient({
   }),
   localState: new LocalState({}),
   incrementalHandler: new Defer20220824Handler(),
+  devtools: {
+    enabled: __DEV__,
+    name: `Apollo Client Testbed (${Platform.OS})`,
+  },
 });
-
 if (__DEV__) {
-  // init devtools
+  // set up the Apollo Client VSCode DevTools connection
+  // see https://www.apollographql.com/docs/react/development-testing/developer-tooling#apollo-client-devtools-in-vs-code
+  if (Platform.OS === "android") {
+    // in the Android emulator, "10.0.2.2" points to the host machine
+    // if you are using a physical device, you might need to replace this
+    // with `127.0.0.` and set up port forwarding
+    connectApolloClientToVSCodeDevTools(client, "ws://10.0.2.2:7095");
+  } else if (Platform.OS === "ios") {
+    connectApolloClientToVSCodeDevTools(client, "ws://localhost:7095");
+  }
+  // in web, just use the browser devtools, no need for the VSCode DevTools
 }
 
 export default function Layout() {
