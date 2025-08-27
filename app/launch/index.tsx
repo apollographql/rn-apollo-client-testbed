@@ -21,34 +21,37 @@ export default function Missions() {
   return (
     <>
       <Stack.Screen options={{ title: "Launch Overview" }} />
-      <FlatList
-        data={launches}
-        refreshing={result.loading}
-        onRefresh={() => result.refetch()}
-        ListEmptyComponent={
-          result.loading ? (
-            <Box variant="centered">
-              <Text>loading</Text>
-            </Box>
-          ) : undefined
-        }
-        renderItem={({ item, index }) => {
-          return (
-            <Link asChild href={`/launch/${item.id}`}>
-              <Pressable
-                flexDirection="row"
-                alignItems="baseline"
-                justifyContent="space-between"
-                borderTopWidth={index ? 1 : 0}
-                padding="s"
-              >
-                <Text fontSize={16}>{item.mission_name}</Text>
-                <Text>{item.launch_date_unix}</Text>
-              </Pressable>
-            </Link>
-          );
-        }}
-      />
+      <Box variant="page">
+        <FlatList
+          data={launches}
+          refreshing={result.loading}
+          onRefresh={() => result.refetch()}
+          ListEmptyComponent={
+            result.loading ? (
+              <Box variant="centered">
+                <Text>loading</Text>
+              </Box>
+            ) : undefined
+          }
+          style={{ alignSelf: "stretch" }}
+          renderItem={({ item, index }) => {
+            return (
+              <Link asChild href={`/launch/${item.id}`}>
+                <Pressable
+                  flexDirection="row"
+                  alignItems="baseline"
+                  justifyContent="space-between"
+                  borderTopWidth={index ? 1 : 0}
+                  padding="s"
+                >
+                  <Text fontSize={16}>{item.mission_name}</Text>
+                  <Text>{item.launch_date_unix}</Text>
+                </Pressable>
+              </Link>
+            );
+          }}
+        />
+      </Box>
     </>
   );
 }

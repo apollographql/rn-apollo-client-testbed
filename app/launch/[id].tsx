@@ -1,8 +1,11 @@
 import { useQuery } from "@apollo/client/react";
-import { Stack, useLocalSearchParams } from "expo-router";
+import {
+  Stack,
+  useLocalSearchParams,
+  type ExternalPathString,
+} from "expo-router";
 import { Box, Link, NextLaunchButton, Text } from "@/components";
 import { LaunchDetailDocument } from "@/queries";
-
 export default function LaunchDetails() {
   const { id } = useLocalSearchParams<"/launch/[id]">();
 
@@ -35,10 +38,14 @@ export default function LaunchDetails() {
               Rocket: {launch.rocket?.rocket_name} ({launch.rocket?.rocket_type}
               )
             </Text>
-            <Text>{launch.links?.wikipedia}</Text>
+            {launch.links?.wikipedia ? (
+              <Link href={launch.links?.wikipedia as ExternalPathString}>
+                {launch.links?.wikipedia}
+              </Link>
+            ) : undefined}
           </>
         )}
-        <Box flexGrow={1} justifyContent="flex-end">
+        <Box flexGrow={1} justifyContent="flex-end" rowGap="s">
           {launch?.id && <NextLaunchButton currentLaunchId={launch.id} />}
           <Link href={`./`}>See all missions</Link>
         </Box>

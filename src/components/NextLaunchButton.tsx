@@ -32,8 +32,10 @@ export function NextLaunchButton({
     return nextLaunch;
   }, [launches, currentLaunchId]);
 
-  return nextLaunch ? (
-    <Link asChild href={`/launch/${nextLaunch.id}`}>
+  return result.loading ? (
+    <Button label="Looking for next launch" disabled />
+  ) : nextLaunch ? (
+    <Link asChild href={`/launch/${nextLaunch?.id}`}>
       <Button label="Next Launch" />
     </Link>
   ) : (

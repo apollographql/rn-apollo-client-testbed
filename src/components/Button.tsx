@@ -36,6 +36,7 @@ export const Button = forwardRef<typeof Pressable, ButtonProps>(function Button(
   return (
     <Pressable
       flex={0}
+      flexBasis={"auto"}
       padding="s"
       borderRadius={10}
       ref={ref}
