@@ -1,4 +1,5 @@
 import { createTheme } from "@shopify/restyle";
+import { Platform } from "react-native";
 
 const palette = {
   black: "#000000",
@@ -63,6 +64,15 @@ const theme = createTheme({
     page: {
       padding: "m",
       alignItems: "center",
+
+      ...(Platform.OS === "web"
+        ? {
+            maxWidth: 600,
+            minWidth: "min(100vw, 600px)",
+            maxHeight: "min(100vh, 800px)",
+            alignSelf: "center",
+          }
+        : {}),
     },
     centered: {
       alignItems: "center",

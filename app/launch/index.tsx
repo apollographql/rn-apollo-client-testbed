@@ -1,10 +1,10 @@
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { Stack } from "expo-router";
 import { useMemo } from "react";
 import { FlatList } from "react-native-gesture-handler";
-import { Box, Link, Pressable, Text } from "../../src/components";
-import { LaunchListDocument } from "../../src/queries";
-import { isDefined } from "../../src/utils";
+import { Box, Link, Pressable, Text } from "@/components";
+import { LaunchListDocument } from "@/queries";
+import { isDefined } from "@/utils";
 
 export default function Missions() {
   const result = useQuery(LaunchListDocument);
@@ -12,41 +12,46 @@ export default function Missions() {
     () =>
       (result.data?.launches ?? []).filter(isDefined).map((launch) => ({
         ...launch,
-        launch_date_unix: new Date(launch.launch_date_unix * 1000).toLocaleDateString(),
+        launch_date_unix: new Date(
+          launch.launch_date_unix * 1000
+        ).toLocaleDateString(),
       })),
     [result.data?.launches]
   );
   return (
     <>
       <Stack.Screen options={{ title: "Launch Overview" }} />
-      <FlatList
-        data={launches}
-        refreshing={result.loading}
-        onRefresh={() => result.refetch()}
-        ListEmptyComponent={
-          result.loading ? (
-            <Box variant="centered">
-              <Text>loading</Text>
-            </Box>
-          ) : undefined
-        }
-        renderItem={({ item, index }) => {
-          return (
-            <Link asChild href={`/launch/${item.id}`}>
-              <Pressable
-                flexDirection="row"
-                alignItems="baseline"
-                justifyContent="space-between"
-                borderTopWidth={index ? 1 : 0}
-                padding="s"
-              >
-                <Text fontSize={16}>{item.mission_name}</Text>
-                <Text>{item.launch_date_unix}</Text>
-              </Pressable>
-            </Link>
-          );
-        }}
-      />
+      <Box variant="page">
+        <FlatList
+          data={launches}
+          refreshing={result.loading}
+          onRefresh={() => result.refetch()}
+          ListEmptyComponent={
+            result.loading ? (
+              <Box variant="centered">
+                <Text>loading</Text>
+              </Box>
+            ) : undefined
+          }
+          style={{ alignSelf: "stretch" }}
+          renderItem={({ item, index }) => {
+            return (
+              <Link asChild href={`/launch/${item.id}`}>
+                <Pressable
+                  flexDirection="row"
+                  alignItems="baseline"
+                  justifyContent="space-between"
+                  borderTopWidth={index ? 1 : 0}
+                  padding="s"
+                >
+                  <Text fontSize={16}>{item.mission_name}</Text>
+                  <Text>{item.launch_date_unix}</Text>
+                </Pressable>
+              </Link>
+            );
+          }}
+        />
+      </Box>
     </>
   );
 }
